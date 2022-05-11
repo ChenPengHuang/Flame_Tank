@@ -18,29 +18,8 @@ class MainGameState extends State<MainGamePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: const Color.fromRGBO(0, 0, 0, 1),
-      body: Stack(
-        children: [
-          GameWidget(game: game),
-          Align(
-            alignment: Alignment.bottomRight,
-            child: Padding(
-              padding: const EdgeInsets.all(32.0),
-              child: Joypad(onDirectionChanged: onJoypadDirectionChanged),
-            ),
-          ),
-          Align(
-            alignment: Alignment.bottomLeft,
-            child: Padding(
-              padding: const EdgeInsets.all(32.0),
-              child: Joypad(onDirectionChanged: onJoypadDirectionChanged),
-            ),
-          ),
-        ],
-      ),
+      body: GameWidget(game: game),
     );
   }
 
-  void onJoypadDirectionChanged(Direction direction) {
-    // game.onJoypadDirectionChanged(direction);
-  }
 }
