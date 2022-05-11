@@ -3,16 +3,35 @@ import 'package:tank/helpers/direction.dart';
 
 class JoypadProvider extends ChangeNotifier {
 
-  ValueChanged<Direction>? _onDirectionChangeListener;
+  final List<ValueChanged<Direction>> _onDirectionChangeListeners = [];
+  final List<VoidCallback> _onFireListeners = [];
 
 
-  void setDirectionChangeListener(ValueChanged<Direction> listener){
-    _onDirectionChangeListener = listener;
+  void addDirectionChangeListener(ValueChanged<Direction> listener){
+    _onDirectionChangeListeners.add(listener);
   }
 
+  void removeDirectionChangeListener(ValueChanged<Direction> listener){
+    _onDirectionChangeListeners.remove(listener);
+  }
 
   void onDirectionChange(Direction direction){
-    _onDirectionChangeListener?.call(direction);
+    for (var element in _onDirectionChangeListeners) {
+      element.call(direction);
+    }
   }
 
+
+  void addOnFireListener(VoidCallback listener){
+    _onFireListeners.add(listener);
+  }
+
+  void removeOnFireListener(VoidCallback listener){
+    _onFireListeners.remove(listener);
+  }
+  void onFire() {
+    for (var element in _onFireListeners) {
+      element.call();
+    }
+  }
 }

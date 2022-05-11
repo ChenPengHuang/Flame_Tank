@@ -1,7 +1,5 @@
 import 'package:flame/game.dart';
 import 'package:flutter/material.dart';
-import 'package:tank/helpers/direction.dart';
-import 'package:tank/helpers/joypad.dart';
 import 'package:tank/tank_game.dart';
 
 class MainGamePage extends StatefulWidget {

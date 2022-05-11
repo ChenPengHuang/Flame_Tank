@@ -1,7 +1,7 @@
 import 'package:flame/flame.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:tank/helpers/direction.dart';
+import 'package:tank/helpers/fire.dart';
 import 'package:tank/helpers/joypad.dart';
 import 'package:tank/joypad_provider.dart';
 import 'package:tank/module/main/main_page.dart';
@@ -32,20 +32,22 @@ class MyApp extends StatelessWidget {
           return Stack(
             children: [
               child ?? const SizedBox.shrink(),
-              const Align(
+              Align(
                 alignment: Alignment.bottomLeft,
                 child: Padding(
-                  padding: EdgeInsets.all(32.0),
-                  child: Joypad(),
+                  padding: const EdgeInsets.all(32.0),
+                  child: Joypad(
+                    onDirectionChanged:
+                        context.read<JoypadProvider>().onDirectionChange,
+                  ),
                 ),
               ),
               Align(
                 alignment: Alignment.bottomRight,
                 child: Padding(
                   padding: const EdgeInsets.all(32.0),
-                  child: Joypad(
-                    onDirectionChanged:
-                        context.read<JoypadProvider>().onDirectionChange,
+                  child: Fire(
+                    onFire: context.read<JoypadProvider>().onFire,
                   ),
                 ),
               ),

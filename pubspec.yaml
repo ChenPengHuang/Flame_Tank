@@ -28,4 +28,5 @@ flutter:
   assets:
     - assets/images/
     - assets/images/ui/
+    - assets/images/tank/
 
