@@ -7,15 +7,21 @@ class Fire extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: onFire,
-      child: SizedBox(
-        height: 60,
-        width: 60,
-        child: Container(
-          decoration: BoxDecoration(
-            color: const Color(0x88ffffff),
-            borderRadius: BorderRadius.circular(30),
+    return SizedBox(
+      width: 120,
+      height: 120,
+      child: Center(
+        child: GestureDetector(
+          onTap: onFire,
+          child: SizedBox(
+            height: 60,
+            width: 60,
+            child: Container(
+              decoration: BoxDecoration(
+                color: const Color(0x88ffffff),
+                borderRadius: BorderRadius.circular(30),
+              ),
+            ),
           ),
         ),
       ),

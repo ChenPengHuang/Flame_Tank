@@ -1,6 +1,5 @@
 import 'package:flame/collisions.dart';
 import 'package:flame/components.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:tank/helpers/direction.dart';
 import 'dart:math' as math;
 
@@ -16,18 +15,23 @@ class Player extends SpriteComponent with HasGameRef, CollisionCallbacks {
 
   set direction(Direction direction) {
     _direction = direction;
+    if (_direction != Direction.none) {
+      lastDirection = direction;
+    }
     _turnOn();
   }
 
   Direction get direction => _direction;
+  Direction lastDirection = Direction.up;
 
   @override
   Future<void> onLoad() async {
     super.onLoad();
+    add(RectangleHitbox(size: size));
     sprite = Sprite(
       await gameRef.images.load('tank/H1U.png'),
     );
-    position = Vector2(gameRef.size.x / 2, gameRef.size.y - size.y);
+    position = Vector2(gameRef.size.x / 2 - 50, gameRef.size.y - size.y / 2);
   }
 
   @override
