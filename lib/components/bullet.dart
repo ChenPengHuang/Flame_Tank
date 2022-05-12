@@ -11,7 +11,7 @@ class Bullet extends SpriteComponent with HasGameRef, CollisionCallbacks {
 
   Bullet({
     required this.direction,
-  }) : super(size: Vector2(8, 10), anchor: Anchor.center);
+  }) : super(size: Vector2(8, 10));
 
   @override
   Future<void>? onLoad() async {
@@ -20,7 +20,7 @@ class Bullet extends SpriteComponent with HasGameRef, CollisionCallbacks {
     sprite = Sprite(
       await gameRef.images.load('bullet/normal.png'),
     );
-    switch(direction){
+    switch (direction) {
       case Direction.up:
         angle = -math.pi / 2;
         break;
@@ -82,9 +82,9 @@ class Bullet extends SpriteComponent with HasGameRef, CollisionCallbacks {
   @override
   void onCollision(Set<Vector2> intersectionPoints, PositionComponent other) {
     super.onCollision(intersectionPoints, other);
-    if(other is ScreenHitbox){
+    if (other is ScreenHitbox) {
       gameRef.remove(this);
-    }else  if(other is Brick){
+    } else if (other is Brick) {
       gameRef.remove(this);
     }
   }

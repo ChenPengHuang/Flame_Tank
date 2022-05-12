@@ -4,7 +4,7 @@ import 'package:tank/helpers/direction.dart';
 import 'dart:math' as math;
 
 class Player extends SpriteComponent with HasGameRef, CollisionCallbacks {
-  Player() : super(size: Vector2.all(39), anchor: Anchor.center);
+  Player() : super(size: Vector2.all(48), anchor: Anchor.center);
 
   final double _speed = 100.0;
 
@@ -27,11 +27,13 @@ class Player extends SpriteComponent with HasGameRef, CollisionCallbacks {
   @override
   Future<void> onLoad() async {
     super.onLoad();
-    add(RectangleHitbox(size: size));
+    add(RectangleHitbox(
+      size: size,
+    ));
     sprite = Sprite(
       await gameRef.images.load('tank/H1U.png'),
+      srcSize: Vector2(39, 39),
     );
-    position = Vector2(gameRef.size.x / 2 - 50, gameRef.size.y - size.y / 2);
   }
 
   @override

@@ -6,7 +6,7 @@ class Brick extends SpriteComponent with HasGameRef, CollisionCallbacks {
 
   Brick({
     required Vector2 position,
-  }) : super(size: Vector2(24, 24), position: position, anchor: Anchor.center);
+  }) : super(size: Vector2(24, 24), position: position);
 
   @override
   Future<void>? onLoad() async {

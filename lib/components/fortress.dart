@@ -5,7 +5,7 @@ import 'dart:math' as math;
 
 class Fortress extends SpriteComponent with HasGameRef, CollisionCallbacks {
 
-  Fortress() : super(size: Vector2(48, 48), anchor: Anchor.center);
+  Fortress() : super(size: Vector2(48, 48));
 
   @override
   Future<void>? onLoad() async {
@@ -14,6 +14,6 @@ class Fortress extends SpriteComponent with HasGameRef, CollisionCallbacks {
     sprite = Sprite(
       await gameRef.images.load('flag.png'),
     );
-    position = Vector2(gameRef.size.x / 2, gameRef.size.y - size.y / 2);
+    position = Vector2((gameRef.size.x  - size.x) / 2, gameRef.size.y - size.y);
   }
 }

@@ -10,6 +10,7 @@ Future<void> main() async {
   Provider.debugCheckInvalidValueType = null;
   WidgetsFlutterBinding.ensureInitialized();
   await Flame.device.fullScreen();
+  await Flame.device.setLandscape();
   runApp(const MyApp());
 }
 
