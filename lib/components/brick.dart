@@ -1,6 +1,7 @@
 import 'package:flame/collisions.dart';
 import 'package:flame/components.dart';
 import 'package:tank/components/bullet.dart';
+import 'package:tank/components/player.dart';
 
 class Brick extends SpriteComponent with HasGameRef, CollisionCallbacks {
 
@@ -22,6 +23,26 @@ class Brick extends SpriteComponent with HasGameRef, CollisionCallbacks {
     super.onCollision(intersectionPoints, other);
     if(other is Bullet){
       gameRef.remove(this);
+    }
+  }
+
+  @override
+  void onCollisionStart(Set<Vector2> intersectionPoints, PositionComponent other) {
+    super.onCollisionStart(intersectionPoints, other);
+    if(other is Player){
+      gameRef.images.load('map/sea.png').then((value){
+        sprite = Sprite(value);
+      });
+    }
+  }
+
+  @override
+  void onCollisionEnd(PositionComponent other) {
+    super.onCollisionEnd(other);
+    if(other is Player){
+      gameRef.images.load('map/brick.png').then((value){
+        sprite = Sprite(value);
+      });
     }
   }
 }

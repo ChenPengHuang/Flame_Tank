@@ -10,8 +10,6 @@ class Player extends SpriteComponent with HasGameRef, CollisionCallbacks {
 
   Direction _direction = Direction.none;
 
-  Direction _collisionDirection = Direction.none;
-  bool _hasCollided = false;
 
   set direction(Direction direction) {
     _direction = direction;
@@ -32,7 +30,7 @@ class Player extends SpriteComponent with HasGameRef, CollisionCallbacks {
     ));
     sprite = Sprite(
       await gameRef.images.load('tank/H1U.png'),
-      srcSize: Vector2(39, 39),
+      srcSize: Vector2(48, 48),
     );
   }
 
@@ -64,22 +62,22 @@ class Player extends SpriteComponent with HasGameRef, CollisionCallbacks {
   void _movePlayer(double delta) {
     switch (direction) {
       case Direction.up:
-        if (canPlayerMoveUp()) {
+        if (checkPlayerCanMove(direction)) {
           moveUp(delta);
         }
         break;
       case Direction.down:
-        if (canPlayerMoveDown()) {
+        if (checkPlayerCanMove(direction)) {
           moveDown(delta);
         }
         break;
       case Direction.left:
-        if (canPlayerMoveLeft()) {
+        if (checkPlayerCanMove(direction)) {
           moveLeft(delta);
         }
         break;
       case Direction.right:
-        if (canPlayerMoveRight()) {
+        if (checkPlayerCanMove(direction)) {
           moveRight(delta);
         }
         break;
@@ -104,46 +102,60 @@ class Player extends SpriteComponent with HasGameRef, CollisionCallbacks {
     position.add(Vector2(delta * _speed, 0));
   }
 
+  Map<PositionComponent, Direction> collidedComponent  = {};
+
   @override
   void onCollision(Set<Vector2> intersectionPoints, PositionComponent other) {
     super.onCollision(intersectionPoints, other);
-    if (!_hasCollided) {
-      _hasCollided = true;
-      _collisionDirection = direction;
-    }
+
+
   }
+
+  @override
+  void onCollisionStart(Set<Vector2> intersectionPoints, PositionComponent other) {
+    super.onCollisionStart(intersectionPoints, other);
+    //发生碰撞==Instance of 'ScreenHitbox<FlameGame>'58488012 , lastDirection=Direction.down
+    // 发生碰撞==Instance of 'Brick'856267170 , lastDirection=Direction.right
+    // 发生碰撞==Instance of 'Brick'96830315 , lastDirection=Direction.right
+    // 释放碰撞==Instance of 'ScreenHitbox<FlameGame>'58488012
+    // 发生碰撞==Instance of 'Brick'232425333 , lastDirection=Direction.up
+    //转向才碰撞，
+    switch (lastDirection) {
+      case Direction.up:
+        collidedComponent.putIfAbsent(other, () => lastDirection);
+        break;
+      case Direction.down:
+        collidedComponent.putIfAbsent(other, () => lastDirection);
+        break;
+      case Direction.left:
+        collidedComponent.putIfAbsent(other, () => lastDirection);
+        break;
+      case Direction.right:
+        collidedComponent.putIfAbsent(other, () => lastDirection);
+        break;
+      case Direction.none:
+        break;
+    }
+    print('发生碰撞==${other}${other.hashCode} , lastDirection=$lastDirection');
+  }
+
 
   @override
   void onCollisionEnd(PositionComponent other) {
     super.onCollisionEnd(other);
-    _hasCollided = false;
+    print('释放碰撞==${other}${other.hashCode}');
+    collidedComponent.remove(other);
   }
 
-  bool canPlayerMoveUp() {
-    if (_hasCollided && _collisionDirection == Direction.up) {
-      return false;
-    }
-    return true;
-  }
 
-  bool canPlayerMoveDown() {
-    if (_hasCollided && _collisionDirection == Direction.down) {
-      return false;
-    }
-    return true;
-  }
 
-  bool canPlayerMoveLeft() {
-    if (_hasCollided && _collisionDirection == Direction.left) {
-      return false;
+  bool checkPlayerCanMove(Direction direction){
+    int len = collidedComponent.entries.length;
+    for(int i=0;  i<len;i++){
+       if(collidedComponent.values.elementAt(i) == direction){
+        return false;
+      }
     }
-    return true;
-  }
-
-  bool canPlayerMoveRight() {
-    if (_hasCollided && _collisionDirection == Direction.right) {
-      return false;
-    }
-    return true;
+   return true;
   }
 }
