@@ -1,8 +1,6 @@
 import 'package:flame/collisions.dart';
 import 'package:flame/components.dart';
-import 'package:flame_forge2d/contact_callbacks.dart';
 import 'package:flame_forge2d/flame_forge2d.dart';
-import 'package:tank/components/brick.dart';
 import 'package:tank/helpers/direction.dart';
 import 'dart:math' as math;
 
@@ -50,20 +48,19 @@ class Player extends BodyComponent {
     _movePlayer(dt);
   }
 
-
   void _turnOn() {
     switch (direction) {
       case Direction.up:
-        body.setTransform(body.position , 0);
+        body.setTransform(body.position, 0);
         break;
       case Direction.down:
-        body.setTransform(body.position , math.pi);
+        body.setTransform(body.position, math.pi);
         break;
       case Direction.left:
-        body.setTransform(body.position , math.pi * 3 / 2);
+        body.setTransform(body.position, math.pi * 3 / 2);
         break;
       case Direction.right:
-        body.setTransform(body.position , math.pi  / 2);
+        body.setTransform(body.position, math.pi / 2);
         break;
       case Direction.none:
         break;
@@ -90,20 +87,19 @@ class Player extends BodyComponent {
   }
 
   void moveUp(double delta) {
-    body.position.add(Vector2(0, delta * -_speed));
+    body.setTransform(body.position + Vector2(0, delta * -_speed), body.angle);
   }
 
   void moveDown(double delta) {
-    body.position.add(Vector2(0, delta * _speed));
+    body.setTransform(body.position + Vector2(0, delta * _speed), body.angle);
   }
 
   void moveLeft(double delta) {
-
-    body.position.add(Vector2(delta * -_speed, 0));
+    body.setTransform(body.position + Vector2(delta * -_speed, 0), body.angle);
   }
 
   void moveRight(double delta) {
-    body.position.add(Vector2(delta * _speed, 0));
+    body.setTransform(body.position + Vector2(delta * _speed, 0), body.angle);
   }
 
   @override
@@ -120,10 +116,7 @@ class Player extends BodyComponent {
 
     final fixtureDef = FixtureDef(
       shape,
-      userData: this, // To be able to determine object in collision
-      restitution: 0.8,
-      density: 1.0,
-      friction: 0.2,
+      userData: this,
     );
 
     final bodyDef = BodyDef(

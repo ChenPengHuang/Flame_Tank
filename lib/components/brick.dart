@@ -1,48 +1,58 @@
 import 'package:flame/collisions.dart';
 import 'package:flame/components.dart';
+import 'package:flame_forge2d/body_component.dart';
+import 'package:flame_forge2d/flame_forge2d.dart';
+import 'package:forge2d/src/dynamics/body.dart';
 import 'package:tank/components/bullet.dart';
 import 'package:tank/components/player.dart';
 
-class Brick extends SpriteComponent with HasGameRef, CollisionCallbacks {
+class Brick extends BodyComponent {
+  final Vector2 position;
+  final Vector2 size;
 
-  Brick({
-    required Vector2 position,
-  }) : super(size: Vector2(24, 24), position: position);
+  Brick(
+    this.position, {
+    Vector2? size,
+  }) : size = size ?? Vector2(24, 24);
 
   @override
-  Future<void>? onLoad() async {
+  Future<void> onLoad() async {
     super.onLoad();
-    add(RectangleHitbox(size: size));
-    sprite = Sprite(
-      await gameRef.images.load('map/brick.png'),
+    // renderBody = false;
+    // final sprite = await gameRef.loadSprite('map/brick.png');
+    //
+    // add(
+    //   SpriteComponent(
+    //     sprite: sprite,
+    //     size: size,
+    //     anchor: Anchor.center,
+    //   ),
+    // );
+  }
+
+  @override
+  Body createBody() {
+    final shape = PolygonShape();
+
+    final vertices = [
+      Vector2(-size.x / 2, size.y / 2),
+      Vector2(size.x / 2, size.y / 2),
+      Vector2(size.x / 2, -size.y / 2),
+      Vector2(-size.x / 2, -size.y / 2),
+    ];
+    shape.set(vertices);
+
+    final fixtureDef = FixtureDef(
+      shape,
+      userData: this,
     );
-  }
 
-  @override
-  void onCollision(Set<Vector2> intersectionPoints, PositionComponent other) {
-    super.onCollision(intersectionPoints, other);
-    if(other is Bullet){
-      gameRef.remove(this);
-    }
-  }
+    final bodyDef = BodyDef(
+      position: position,
+      type: BodyType.static,
+      isAwake: false,
+    )..userData = this; //开启检测碰撞
 
-  @override
-  void onCollisionStart(Set<Vector2> intersectionPoints, PositionComponent other) {
-    super.onCollisionStart(intersectionPoints, other);
-    if(other is Player){
-      gameRef.images.load('map/sea.png').then((value){
-        sprite = Sprite(value);
-      });
-    }
-  }
-
-  @override
-  void onCollisionEnd(PositionComponent other) {
-    super.onCollisionEnd(other);
-    if(other is Player){
-      gameRef.images.load('map/brick.png').then((value){
-        sprite = Sprite(value);
-      });
-    }
+    return world.createBody(bodyDef)..createFixture(fixtureDef);
   }
 }

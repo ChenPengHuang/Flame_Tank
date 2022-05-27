@@ -1,6 +1,4 @@
-import 'package:flame/collisions.dart';
 import 'package:flame/components.dart';
-import 'dart:math' as math;
 
 import 'package:flame_forge2d/flame_forge2d.dart';
 
@@ -16,6 +14,7 @@ class Fortress extends BodyComponent {
   @override
   Future<void> onLoad() async {
     super.onLoad();
+    renderBody = false;
     final sprite = await gameRef.loadSprite('flag.png');
 
     add(
@@ -41,15 +40,13 @@ class Fortress extends BodyComponent {
 
     final fixtureDef = FixtureDef(
       shape,
-      userData: this, // To be able to determine object in collision
-      restitution: 0.8,
-      density: 1.0,
-      friction: 0.2,
+      userData: this,
     );
 
     final bodyDef = BodyDef(
       position: position,
       type: BodyType.static,
+      isAwake: false
     )..userData = this; //开启检测碰撞
 
     return world.createBody(bodyDef)..createFixture(fixtureDef);
