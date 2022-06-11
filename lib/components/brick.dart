@@ -18,16 +18,16 @@ class Brick extends BodyComponent {
   @override
   Future<void> onLoad() async {
     super.onLoad();
-    // renderBody = false;
-    // final sprite = await gameRef.loadSprite('map/brick.png');
-    //
-    // add(
-    //   SpriteComponent(
-    //     sprite: sprite,
-    //     size: size,
-    //     anchor: Anchor.center,
-    //   ),
-    // );
+    renderBody = false;
+    final sprite = await gameRef.loadSprite('map/brick.png');
+
+    add(
+      SpriteComponent(
+        sprite: sprite,
+        size: size,
+        anchor: Anchor.center,
+      ),
+    );
   }
 
   @override

@@ -9,11 +9,17 @@ import 'package:tank/helpers/direction.dart';
 import 'package:tank/joypad_provider.dart';
 
 class TankGame extends Forge2DGame {
-  final double boxSize = 48;
+  double unitSize = 48;
   late Player _player;
   late Fortress _fortress;
 
-  TankGame() : super(gravity: Vector2(0, 10.0), zoom: 1);
+  TankGame() : super(gravity: Vector2(0, 0), zoom: 1);
+
+  @override
+  void onGameResize(Vector2 canvasSize) {
+    super.onGameResize(canvasSize);
+    unitSize = canvasSize.x / 13;
+  }
 
   @override
   void onAttach() {
@@ -27,10 +33,10 @@ class TankGame extends Forge2DGame {
   Future<void>? onLoad() async {
     addAll(createBoundaries(this));
     _addFortress();
-    var playerSize = Vector2(48, 48);
+    var playerSize = Vector2(unitSize, unitSize);
     _player = Player(
       Vector2(
-        ((size.x / 2 - _fortress.size.x/2) - 24 - playerSize.x / 2),
+        ((size.x / 2 - _fortress.size.x/2) - unitSize/2 - playerSize.x / 2),
         size.y - playerSize.y / 2,
       ),
     );
@@ -38,17 +44,18 @@ class TankGame extends Forge2DGame {
   }
 
   Future<void> _addFortress() async {
-    Vector2 fortressSize = Vector2(48.0, 48.0);
+    Vector2 fortressSize = Vector2(unitSize, unitSize);
     Vector2 fortressPosition = Vector2(size.x / 2, size.y - fortressSize.y / 2);
     _fortress = Fortress(fortressPosition, size: fortressSize);
     await add(_fortress);
-    double brickSize = 24;
+    double brickSize = unitSize/2;
     add(
       Brick(
         Vector2(
           fortressPosition.x - brickSize / 2 - fortressSize.x / 2,
           size.y - brickSize / 2,
         ),
+        size: Vector2(brickSize, brickSize),
       ),
     );
     add(
@@ -57,6 +64,7 @@ class TankGame extends Forge2DGame {
           fortressPosition.x - brickSize / 2 - fortressSize.x / 2,
           size.y - brickSize * 1.5,
         ),
+        size: Vector2(brickSize, brickSize),
       ),
     );
     add(
@@ -65,32 +73,38 @@ class TankGame extends Forge2DGame {
           fortressPosition.x - brickSize / 2 - fortressSize.x / 2,
           size.y - brickSize * 2.5,
         ),
+        size: Vector2(brickSize, brickSize),
       ),
     );
     add(
       Brick(
         Vector2(fortressPosition.x- brickSize / 2, size.y - brickSize * 2.5),
+        size: Vector2(brickSize, brickSize),
       ),
     );
     add(
       Brick(
         Vector2(fortressPosition.x + brickSize / 2, size.y - brickSize * 2.5),
+        size: Vector2(brickSize, brickSize),
       ),
     );
     add(
       Brick(
         Vector2(fortressPosition.x + brickSize * 1.5, size.y - brickSize * 2.5),
+        size: Vector2(brickSize, brickSize),
       ),
     );
 
     add(
       Brick(
         Vector2(fortressPosition.x + brickSize * 1.5, size.y - brickSize * 1.5),
+        size: Vector2(brickSize, brickSize),
       ),
     );
     add(
       Brick(
         Vector2(fortressPosition.x + brickSize * 1.5, size.y - brickSize/2),
+        size: Vector2(brickSize, brickSize),
       ),
     );
   }
@@ -103,16 +117,16 @@ class TankGame extends Forge2DGame {
     Bullet bullet = Bullet(direction: _player.lastDirection);
     switch (_player.lastDirection) {
       case Direction.up:
-        bullet.position = _player.position - Vector2(0, _player.size.y / 2);
+        bullet.position = _player.body.position ;
         break;
       case Direction.down:
-        bullet.position = _player.position + Vector2(0, _player.size.y / 2);
+        bullet.position = _player.body.position ;
         break;
       case Direction.left:
-        bullet.position = _player.position - Vector2(_player.size.y / 2, 0);
+        bullet.position = _player.body.position ;
         break;
       case Direction.right:
-        bullet.position = _player.position + Vector2(_player.size.y / 2, 0);
+        bullet.position = _player.body.position ;
         break;
       case Direction.none:
         break;

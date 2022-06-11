@@ -20,7 +20,7 @@ class MainGameState extends State<MainGamePage> {
         child: Container(
           color: Colors.black,
           child: AspectRatio(
-            aspectRatio: 4 / 3,
+            aspectRatio: 14 / 13,
             child: GameWidget(game: game),
           ),
         ),

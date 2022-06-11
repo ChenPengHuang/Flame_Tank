@@ -122,6 +122,7 @@ class Player extends BodyComponent {
     final bodyDef = BodyDef(
       position: position,
       type: BodyType.dynamic,
+      isAwake: false,
     )..userData = this; //开启检测碰撞
 
     return world.createBody(bodyDef)..createFixture(fixtureDef);
